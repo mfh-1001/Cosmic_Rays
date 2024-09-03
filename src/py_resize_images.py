@@ -1,8 +1,5 @@
-#Import libraries
 import cv2
 import os
-
-#We use relative paths, otherwise cv2 can cause problems
 
 relative_path = "Datos_Muestra"
 detection_types =["spot", "worm", "track"]

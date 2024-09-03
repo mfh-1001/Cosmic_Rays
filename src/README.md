@@ -8,11 +8,11 @@ Este repositorio contiene scripts en Python para generar un dataset. El proceso 
 
 2. Ejecuta los siguientes scripts en orden desde `wrk_dir`
 
-   - `py_rename_files_mine.py`
-   - `py_crop_images_mine.py`
-   - `py_resize_images_mine.py`
-   - `py_normalized_images_mine.py`
-   - `py_modified_dataset_mine.py`
+   - `py_rename_files.py`
+   - `py_crop_images.py`
+   - `py_resize_images.py`
+   - `py_normalized_images.py`
+   - `py_modified_dataset.py`
    - `py_validate_modified_dataset.py`
 
 ---
@@ -27,9 +27,9 @@ This repository contains Python scripts to generate a dataset. The process invol
 
 2. Execute the following scripts in order from `wrk_dir`:
 
-   - `py_rename_files_mine.py`
-   - `py_crop_images_mine.py`
-   - `py_resize_images_mine.py`
-   - `py_normalized_images_mine.py`
-   - `py_modified_dataset_mine.py`
+   - `py_rename_files.py`
+   - `py_crop_images.py`
+   - `py_resize_images.py`
+   - `py_normalized_images.py`
+   - `py_modified_dataset.py`
    - `py_validate_modified_dataset.py`

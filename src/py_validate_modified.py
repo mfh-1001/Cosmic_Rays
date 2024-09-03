@@ -10,14 +10,13 @@ import csv
 import re 
 import collections
 
-#We use relative paths because absolute ones causes problems with cv2. BE CAREFUL with the pathings.
 relative_path = "Datos_Muestra" 
 detections_types = ["spot", "track", "worm"]
 A_scale_values, C_scale_values = [145, 740], [690, 715] #The regions of the image we want.
 A_scale, C_scale = [162, 688], [659, 714]
 
 
-def validate_muons_integration(file_path):#Coge una imagen y la pone en ByN para valida visualmente que se ha realizado bien la integracion
+def validate_muons_integration(file_path):#Select an imagen an set it to black and white to visually validate the integration.
     """Transform an image into black and white in order to validate visually that the integration is successful.
 
     Args:
@@ -33,9 +32,7 @@ def validate_muons_integration(file_path):#Coge una imagen y la pone en ByN para
 
 #---------------------------------------------------------MAIN----------------------------------------------------------------------#
 def main():
-    """Main functions with 3 steps. Finally, it validates the process by creating a new dataset with the images generated in black and white.
-    """    
-    #--------------------------------------------------STEP 3-----------------------------------------------------------------------#
+    """Finally, it validates the process by creating a new dataset with the images generated in black and white."""    
     #We transform the previous dataset to black and white to visually validate the process
     for filename in os.listdir("modified_dataset"):
         #Get the full path to the file

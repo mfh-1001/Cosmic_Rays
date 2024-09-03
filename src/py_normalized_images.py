@@ -1,4 +1,3 @@
-#First we import all the libraries.
 import cv2 
 from pytesseract import pytesseract 
 import os 
@@ -7,7 +6,6 @@ from scipy.signal import find_peaks
 import scipy.ndimage 
 
 
-#We use relative paths because absolute ones causes problems with cv2. BE CAREFUL with the pathings.
 relative_path = "Datos_Muestra" 
 detections_types = ["spot", "track", "worm"]
 A_scale_values, C_scale_values = [145, 740], [690, 715] #The regions of the image we want.
@@ -31,7 +29,6 @@ def crop_scale_values(image_name, detection_type):
     #All pixels with values lower than 225 are set to 0 and 1 if they are larger.
     black_pixels = np.array(np.where(cropped_scale_values_image == 0))[:-1, :]
     #Finds all the black pixels from the previus image.
-    #Esta funcion sirve para encontrar las coordenadas de los pixeles negros en la imagen anterior umbralizada.
 
     #We calculate the maximum and minimum coordinates where black pixels exist.
     offset = 3
@@ -55,7 +52,7 @@ def get_scale_info(cropped_scale_image):
         scale_maximum_visible_value: last visible value of the scale.
         scale_step: scale step.
     """    
-    original_cropped_scale_image = cropped_scale_image.copy()#Realizamos una copia de la imagen recortada
+    original_cropped_scale_image = cropped_scale_image.copy()
     kernel = np.ones((5, 5), np.uint8) 
     cropped_scale_image_eroded = cv2.erode(cropped_scale_image, kernel, iterations=2)
     #This operation set to zero those pixels that are not surrounded by 5x5 ones
@@ -162,7 +159,7 @@ def find_vertical_peaks(v_projection):
     v_peaks, _ = find_peaks(v_projection, distance=43) #43 is an arbitray minimal distance between peaks
     return v_peaks
 
-def sort_contours(cnts, method="left-to-right"):#Ordena los contornos de la manera especificada
+def sort_contours(cnts, method="left-to-right"):#Sort contours in the specified way
     """Sorts the contours in the specified way
 
     Args:
@@ -198,9 +195,7 @@ def normalize_image(image_name, detection_type, scale_span):
 
 
 def main():
-    """Main functions with 3 steps. Firstly read the cropped images and normalize them by extracting their maximum scale value. 
-    """    
-    #--------------------------------------------------STEP 1-----------------------------------------------------------------------#
+    """Read the cropped images and normalize them by extracting their maximum scale value.""" 
     #We normalize the images to a correct format of black and white.
     for detection_type in detections_types:
         for image_name in os.listdir(f"{relative_path}/{detection_type}_renamed"):
