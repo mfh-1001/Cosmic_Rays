@@ -1,0 +1,7 @@
+train: /absolute/path/to/your/train/dataset
+val: /absolute/path/to/your/validation/dataset
+
+names:
+  0: spot
+  1: worm
+  2: track

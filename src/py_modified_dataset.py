@@ -15,7 +15,12 @@ A_scale_values, C_scale_values = [145, 740], [690, 715] #The regions of the imag
 A_scale, C_scale = [162, 688], [659, 714]
 
 
-def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, image_name, csv_path):
+# Background images dimensions (for normalization)
+bg_width = 640
+bg_height = 480
+
+
+def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, image_name, csv_path, csv_normalized_path):
     """Creates the modified dataset. It adds from 1 to 5 detection images randomly to a black noisy background image.
     The background image are selected randomly from a set of background images obtained with the webcam used in the project.
 
@@ -26,6 +31,7 @@ def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, im
         image_id ('int'): image identifier number.
         image_name ('str'): image path.
         csv_path ('str'): csv directory. It will save the characteristics of the new dataset.
+        csv_normalized_path ('str'): path to save the normalized coordinates.
 
     Returns:
         num_images('int'): number of events added to the background image.
@@ -34,14 +40,19 @@ def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, im
     # Load all background images
     background_images = [os.path.join(background_dir, f) for f in os.listdir(background_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
 
-    # Initialize the CSV writer
-    with open(csv_path, mode='a', newline='') as csv_file:  # Open CSV file, it can only be added data at the end.
-        fieldnames = ['image_id', 'image_path', 'muon path', 'muon_type', 'x', 'y', 'w', 'h']
+    # Initialize the CSV writers
+    with open(csv_path, mode='a', newline='') as csv_file, open(csv_normalized_path, mode='a', newline='') as csv_norm_file:
+        fieldnames = ['image_id', 'image_path', 'muon path', 'muon_type', 'center_x', 'center_y', 'w', 'h']
+        norm_fieldnames = ['image_id', 'image_path', 'muon path', 'muon_type', 'norm_center_x', 'norm_center_y', 'norm_w', 'norm_h']
+        
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames, dialect='excel')
+        norm_writer = csv.DictWriter(csv_norm_file, fieldnames=norm_fieldnames, dialect='excel')
 
         # Write the header row if the file is empty
         if os.stat(csv_path).st_size == 0:
             writer.writeheader()
+        if os.stat(csv_normalized_path).st_size == 0:
+            norm_writer.writeheader()
 
         # Loop through the image directories and load the small images
         images_path = []
@@ -50,7 +61,7 @@ def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, im
             for filename in filenames:
                 image_path = os.path.join(image_dir, filename)
                 images_path.append(image_path)
-        # Shuffle the images (las ordena aleatoriamente)
+        # Shuffle the images
         random.shuffle(images_path)
 
         # Select a random number of images to place on the background
@@ -82,12 +93,30 @@ def create_modified_dataset(background_dir, image_dirs, output_dir, image_id, im
             muon_type = os.path.basename(directory).split("_")[0]
             x = random.randint(0, background.shape[1] - image.shape[1])
             y = random.randint(0, background.shape[0] - image.shape[0])
-            im_intermediate = background[y:y+image.shape[0], x:x+image.shape[1]]
+            w = image.shape[1]
+            h = image.shape[0]
+
+            # Calculate the center coordinates
+            center_x = x + w // 2
+            center_y = y + h // 2
+
+            # Calculate normalized coordinates
+            norm_center_x = center_x / bg_width
+            norm_center_y = center_y / bg_height
+            norm_w = w / bg_width
+            norm_h = h / bg_height
+
+            im_intermediate = background[y:y+h, x:x+w]
             im_intermediate[image > 20] = image[image > 20]
-            background[y:y+image.shape[0], x:x+image.shape[1]] = im_intermediate  # Background image is modified adding the detections
+            background[y:y+h, x:x+w] = im_intermediate  # Background image is modified adding the detections
 
             # Add a row to the CSV file for the placed image
-            writer.writerow({'image_id': image_id, 'image_path': f"output_{image_id}.png", 'muon path': muon_path, 'muon_type': muon_type, 'x': x, 'y': y, 'w': image.shape[1], 'h': image.shape[0]})
+            writer.writerow({'image_id': image_id, 'image_path': f"output_{image_id}.png", 'muon path': muon_path, 'muon_type': muon_type, 
+                             'center_x': center_x, 'center_y': center_y, 'w': w, 'h': h})
+                             
+            # Add a row to the normalized CSV file for the placed image
+            norm_writer.writerow({'image_id': image_id, 'image_path': f"output_{image_id}.png", 'muon path': muon_path, 'muon_type': muon_type, 
+                                  'norm_center_x': norm_center_x, 'norm_center_y': norm_center_y, 'norm_w': norm_w, 'norm_h': norm_h})
 
         # Save the resulting image
         cv2.imwrite(f"{output_dir}{image_name}", background)
@@ -136,7 +165,9 @@ def main():
                                                     ["Datos_Muestra/spot_renamed_cropped_resized_normalized", 
                                                     "Datos_Muestra/track_renamed_cropped_resized_normalized", 
                                                     "Datos_Muestra/worm_renamed_cropped_resized_normalized"], 
-                                                    "modified_webcam_dataset/", i, f"output_{i}.png", "modified_webcam_dataset/dataset_info.csv")
+                                                    "modified_webcam_dataset/", i, f"output_{i}.png", 
+                                                    "modified_webcam_dataset/dataset_info.csv",
+                                                    "modified_webcam_dataset/dataset_info_normalized.csv")
         if generated_number == None:
             generated_numbers.append(0)    
         else:
