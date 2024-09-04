@@ -22,13 +22,13 @@ Se obtiene el dataset en la carpeta `modified_webcam_dataset`. Además, se tiene
 ## Preparar el entrenamiento
 Para entrenar el modelo es necesario preparar la carpeta `src/yolo`. Deberá tener la siguiente estructura:
 ### yolo folder structure
- * [train](./train)
-   * [images](./dir2/images)
-   * [labels](./dir2/labels)
- * [valid](./valid)
-   * [images](./dir2/images)
-   * [labels](./dir2/labels)
- * [muones.yaml](./muones.yaml)
+ * [train]
+   * [images]
+   * [labels]
+ * [valid]
+   * [images]
+   * [labels]
+ * [muones.yaml]
 
 Se debe modificar el archivo `src/yolo/muones.yaml` introduciendo el path absoluto a las carpetas de `train` y `valid`, incluidas en la carpeta `src/yolo`. A su vez, las carpetas `train/images` y `valid/images` deben contener las imágenes de entrenamiento y validación. Finalmente,  las carpetas `train/labels` y `valid/labels` deben incluir un archivo .txt por cada imagen con el mismo nombre. En este archivo debe aparecer la información de cada detección introducida en las imágenes de la siguiente manera:
 
