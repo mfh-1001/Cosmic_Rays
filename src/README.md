@@ -72,13 +72,13 @@ The dataset will be generated in the `modified_webcam_dataset` folder. Additiona
 
 To train the model, you need to set up the `src/yolo` folder with the following structure:
 ### yolo folder structure
- * [train](./train)
-   * [images](./train/images)
-   * [labels](./train/labels)
- * [valid](./valid)
-   * [images](./valid/images)
-   * [labels](./valid/labels)
- * [muones.yaml](./muones.yaml)
+ * [train]
+   * [images]
+   * [labels]
+ * [valid]
+   * [images]
+   * [labels]
+ * [muones.yaml]
 
 You should modify the `src/yolo/muones.yaml` file to include the absolute paths to the `train` and `valid` folders, which are inside the `src/yolo` folder. Additionally, the `train/images` and `valid/images` folders should contain the training and validation images, respectively. Finally, the `train/labels` and `valid/labels` folders should include a `.txt` file for each image with the same name. This file should contain the information for each detection in the images in the following format:
 
