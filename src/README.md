@@ -40,11 +40,14 @@ Se debe modificar el archivo `src/yolo/muones.yaml` introduciendo el path absolu
 Un ejemplo sería:
 
 ![Formato .txt](../images/Formato_yaml.png)
+
 Para más información se puede consultar [https://docs.ultralytics.com/yolov5/tutorials/train_custom_data/](https://docs.ultralytics.com/yolov5/tutorials/train_custom_data/).
 
 ## Realizar el entrenamiento
-Ejecutar el cuaderno `src/training_YOLO.ipynb`.
+Ejecutar el cuaderno `src/training_YOLO.ipynb`. Tener en cuenta la ruta en la que se encuentra la carpeta `yolo`.
 
+## Capturar las detecciones
+Ejecutar el script `src/detect_and:infer.py`. Tener en cuenta la ruta en la que se encuentra el modelo `.pt` guardado.
 ---
 
 ## Description
@@ -94,5 +97,7 @@ An example would be:
 For more information, you can refer to [https://docs.ultralytics.com/yolov5/tutorials/train_custom_data/](https://docs.ultralytics.com/yolov5/tutorials/train_custom_data/).
 
 ## Training
-
 Run the `src/training_YOLO.ipynb` notebook to start the training process.
+
+## Detecting Objects
+To capture detections, run the `src/detect_and_infer.py` script. Make sure to specify the path to the saved `.pt` model file.
